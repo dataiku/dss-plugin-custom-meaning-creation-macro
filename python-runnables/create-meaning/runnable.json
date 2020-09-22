@@ -1,0 +1,75 @@
+/* This file is the descriptor for the python runnable create-meaning */
+{
+    "meta": {
+        "label": "Create Custom Meaning",
+
+        "description": "Create a custom meaning from the column values of a dataset.",
+
+        // icon: must be one of the FontAwesome 3.2.1 icons, complete list here at https://fontawesome.com/v3.2.1/icons/
+        "icon": "icon-check"
+    },
+
+    /* whether the runnable's code is untrusted */
+    "impersonate": false,
+
+    "paramsPythonSetup": "compute_choices.py",
+    "params": [
+        
+        {
+        "type": "SELECT",
+          "name": "action",
+          "label": "Action",
+          "selectChoices": [
+            { "value": "create_new", "label": "Create New Meaning"},
+            { "value": "update", "label": "Update Meaning"}
+          ]
+        },
+        {
+        "type": "SELECT",
+          "name": "meaning_name",
+          "label": "Meaning to Update",
+           "getChoicesFromPython": true,
+            "visibilityCondition" : "model.action == 'update'"
+        },
+        {
+            "name": "new_meaning_name",
+            "label": "New Meaning Name",
+            "type": "STRING",
+            "mandatory": true,
+            "visibilityCondition" : "model.action == 'create_new'",
+            "description": "Only letters, numbers and \"_\""
+
+
+        },
+        {
+            "name": "input_dataset_name",
+            "label": "Dataset",
+            "type": "DATASET",
+            "mandatory": true
+        },
+        {
+          "type": "DATASET_COLUMN",
+          "name": "column_name",
+          "datasetParamName": "input_dataset_name",
+          "label": "Column"
+        }
+        
+    ],
+
+    "permissions": [],
+    
+    "resultType": "HTML",
+
+    "resultLabel": "my production",
+
+    "extension": "txt",
+
+    /* for FILE resultType, the type of data stored in the temp file */
+    "mimeType": "text/plain",
+    "macroRoles": [
+      {
+            "type": "DATASET",
+            "targetParamsKey": "input_dataset_name"
+        } 
+    ]
+}
