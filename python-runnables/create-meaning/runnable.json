@@ -70,6 +70,10 @@
       {
             "type": "DATASET",
             "targetParamsKey": "input_dataset_name"
+        } ,
+      {
+            "type": "PROJECT_MACROS"
         } 
+        
     ]
 }
