@@ -10,7 +10,7 @@
     },
 
     /* whether the runnable's code is untrusted */
-    "impersonate": false,
+    "impersonate": true,
 
     "paramsPythonSetup": "compute_choices.py",
     "params": [
