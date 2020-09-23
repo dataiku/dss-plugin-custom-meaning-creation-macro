@@ -22,7 +22,18 @@
           "selectChoices": [
             { "value": "create_new", "label": "Create New Meaning"},
             { "value": "update", "label": "Update Meaning"}
-          ]
+          ],
+          "defaultValue":"create_new"
+        },
+        {
+        "type": "SELECT",
+          "name": "meaning_type",
+          "label": "Meaning Type",
+          "selectChoices": [
+            { "value": "list_of_values", "label": "List of Values"},
+            { "value": "key_value_mapping", "label": "Key Value Mapping"}
+          ],
+           "defaultValue":"list_of_values"
         },
         {
         "type": "SELECT",
@@ -37,8 +48,8 @@
             "type": "STRING",
             "mandatory": true,
             "visibilityCondition" : "model.action == 'create_new'",
-            "description": "Only letters, numbers and \"_\""
-
+            "description": "Only letters, numbers and \"_\"",
+                       "defaultValue":""
 
         },
         {
@@ -51,7 +62,27 @@
           "type": "DATASET_COLUMN",
           "name": "column_name",
           "datasetParamName": "input_dataset_name",
-          "label": "Column"
+          "label": "Column",
+            "mandatory": true,
+            "visibilityCondition" : "model.meaning_type == 'list_of_values'"
+        },
+        
+        {
+            "name": "key",
+            "label": "Key Column",
+            "datasetParamName": "input_dataset_name",
+            "type": "DATASET_COLUMN",
+            "mandatory": true,
+            "visibilityCondition" : "model.meaning_type == 'key_value_mapping'"
+
+        },
+        {
+            "name": "val",
+            "label": "Value Column",
+            "datasetParamName": "input_dataset_name",
+            "type": "DATASET_COLUMN",
+            "mandatory": true,
+            "visibilityCondition" : "model.meaning_type == 'key_value_mapping'"
         }
         
     ],
