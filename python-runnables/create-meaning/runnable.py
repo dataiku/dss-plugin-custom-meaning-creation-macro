@@ -1,5 +1,7 @@
 # This file is the actual code for the Python runnable create-meaning
 from dataiku.runnables import Runnable, ResultTable
+from dataiku.runnables import utils
+
 import dataiku
 
 class PluginParamValidationError(ValueError):
@@ -64,6 +66,11 @@ class MyRunnable(Runnable):
         column = parameters['column_name']
         
         client = dataiku.api_client()
+        user_client = dataiku.api_client()
+        user_auth_info = user_client.get_auth_info()
+        # Automatically create a privileged API key and obtain a privileged API client
+        # that has administrator privileges.
+        admin_client = utils.get_admin_dss_client("creation1", user_auth_info)
         
         dataset = dataiku.Dataset(dataset_name, self.project_key)
                 
@@ -72,14 +79,14 @@ class MyRunnable(Runnable):
             print(parameters)
             
             new_meaning_name = parameters["new_meaning_name"]
-            list_existing_meanings = [meaning['id'].lower() for meaning in client.list_meanings()]
+            list_existing_meanings = [meaning['id'].lower() for meaning in admin_client.list_meanings()]
             if new_meaning_name.lower() in list_existing_meanings:
                 raise PluginParamValidationError("Meaning name already exists")
 
             if meaning_type == "list_of_values":
                 
                 value_list = self.get_value_list(dataset, column)
-                client.create_meaning(new_meaning_name, 
+                admin_client.create_meaning(new_meaning_name, 
                                       new_meaning_name, 
                                       "VALUES_LIST",
                                       values=value_list,
@@ -92,7 +99,7 @@ class MyRunnable(Runnable):
                 
                 mappings, rt = self.get_key_value_mapping(dataset)
                     
-                client.create_meaning(new_meaning_name.replace(" ","_"),
+                admin_client.create_meaning(new_meaning_name.replace(" ","_"),
                                       new_meaning_name,
                                       "VALUES_MAPPING",
                                       mappings=mappings
@@ -108,7 +115,7 @@ class MyRunnable(Runnable):
                 
                 value_list = self.get_value_list(dataset, column)
                 
-                meaning = client.get_meaning(meaning_to_update)
+                meaning = admin_client.get_meaning(meaning_to_update)
                 definition = meaning.get_definition()
                 definition['values'] = value_list
                 meaning.set_definition(definition)
@@ -120,7 +127,7 @@ class MyRunnable(Runnable):
                                 
                 mappings, rt = self.get_key_value_mapping(dataset)
                 
-                meaning = client.get_meaning(meaning_to_update)
+                meaning = admin_client.get_meaning(meaning_to_update)
                 definition = meaning.get_definition()
                 definition['mappings'] = mappings
                 meaning.set_definition(definition)

@@ -4,7 +4,7 @@
         "label": "Create Custom Meaning",
 
         "description": "Create a custom meaning from the column values of a dataset.",
-
+        
         // icon: must be one of the FontAwesome 3.2.1 icons, complete list here at https://fontawesome.com/v3.2.1/icons/
         "icon": "icon-check"
     },
@@ -33,7 +33,9 @@
             { "value": "list_of_values", "label": "List of Values"},
             { "value": "key_value_mapping", "label": "Key Value Mapping"}
           ],
-           "defaultValue":"list_of_values"
+           "defaultValue":"list_of_values",
+            "description": "Value List specifies the list of possible values for this meaning. Key Value Mapping maps some values to some labels."
+            
         },
         {
         "type": "SELECT",
